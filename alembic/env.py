@@ -15,7 +15,7 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from db_schema import metadata
+from src.db_schema import metadata
 target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,
