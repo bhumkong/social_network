@@ -3,7 +3,7 @@ from datetime import date
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from auth import get_current_user, create_user
-from db_operations import insert_post, select_posts, create_like, delete_like, get_post_like_count, get_like_stats, \
+from db_operations import insert_post, select_posts, create_like, delete_like, get_post_like_count, get_post_like_stats, \
     fetch_user, fetch_users
 from models import Post, User, RowCreationResult, PostCreate, UserCreate
 
@@ -82,9 +82,9 @@ async def unlike_post(post_id: int, current_user: User = Depends(get_current_use
     return 'OK' if success else 'Like not found'
 
 
-@router.get('/analytics/likes/')
-async def get_like_analytics(date_from: date, date_to: date):
+@router.get('/analytics/post_likes/')
+async def get_post_like_analytics(date_from: date, date_to: date):
     if date_from > date_to:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail='date_from must not be greater than date_to')
-    return await get_like_stats(date_from, date_to)
+    return await get_post_like_stats(date_from, date_to)

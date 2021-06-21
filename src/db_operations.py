@@ -132,7 +132,7 @@ async def update_last_login(user_id: int) -> None:
     await database.execute(query)
 
 
-async def get_like_stats(date_from: date, date_to: date) -> dict[date, dict]:
+async def get_post_like_stats(date_from: date, date_to: date) -> dict[date, dict]:
     like_date = cast(like_table.c.datetime, Date).label('date')
     query = select([
         like_date,
