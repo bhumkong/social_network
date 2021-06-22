@@ -1,14 +1,13 @@
 import json
 import os
-from itertools import cycle
 import random
 from typing import Iterator, Optional
 
 import requests
 from oauthlib.oauth2 import LegacyApplicationClient
-from random_word import RandomWords
-
 from requests_oauthlib import OAuth2Session
+
+from src.random_words import RandomWordCycle
 
 
 class Bot:
@@ -29,7 +28,7 @@ class Bot:
         self._number_of_users = number_of_users
         self._max_posts_per_user = max_posts_per_user
         self._max_likes_per_user = max_likes_per_user
-        self._generate_random_words()
+        self._word_cycle = RandomWordCycle()
 
     def read_config_from_file(self, file_path):
         """ Loads config from file, overwriting current values. """
@@ -38,15 +37,6 @@ class Bot:
         self._number_of_users = data.get('number_of_users')
         self._max_posts_per_user = data.get('max_posts_per_user')
         self._max_likes_per_user = data.get('max_likes_per_user')
-
-    def _generate_random_words(self):
-        """ Creates a loop of random words for use as usernames, post title and body content. """
-        random_words = RandomWords()
-        random_word_list = []
-        while not random_word_list:
-            # Sometimes get_random_words() returns None. We'll try until it's not empty.
-            random_word_list = random_words.get_random_words(limit=500)
-        self._word_cycle = cycle(random_word_list)
 
     def create_users(self) -> list[tuple[str, str]]:
         """
